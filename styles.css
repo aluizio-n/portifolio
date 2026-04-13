@@ -657,8 +657,10 @@ strong { color: var(--text); font-weight: 600; }
   font-weight: 700;
   flex-shrink: 0;
 }
-.badge-icon-text.zod  { background: #2563eb; }
+.badge-icon-text.zod   { background: #2563eb; }
 .badge-icon-text.axios { background: #5a29e4; }
+.badge-icon-text.pytest  { background: #0a9edc; }
+.badge-icon-text.vitest  { background: #6e9f18; }
 
 /* Language bar */
 .lang-bar-section { margin-top: 8px; }
