@@ -306,6 +306,27 @@ function addFadeUp() {
   });
 }
 
+// ---------- Mobile menu ----------
+function initMobileMenu() {
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener("click", () => {
+    const isOpen = menu.classList.toggle("open");
+    toggle.classList.toggle("active");
+    document.body.style.overflow = isOpen ? "hidden" : "";
+  });
+
+  menu.querySelectorAll(".mobile-menu-link").forEach((link) => {
+    link.addEventListener("click", () => {
+      menu.classList.remove("open");
+      toggle.classList.remove("active");
+      document.body.style.overflow = "";
+    });
+  });
+}
+
 // ---------- Init ----------
 document.addEventListener("DOMContentLoaded", () => {
   // renderProjects(); // WIP: uncomment when projects are ready
@@ -313,5 +334,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollObserver();
   initNavScroll();
   initActiveNav();
+  initMobileMenu();
   runTerminal();
 });
