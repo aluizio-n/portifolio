@@ -165,30 +165,30 @@ const commands = [
     cmd: "cat about.json",
     output: `{
   "name": "Aluizio Neto",
-  "cargo": "Engenheiro Backend",
-  "stack": ["FastAPI", "Express", "Docker"],
-  "disponivel": true
+  "cargo": "Full Stack Engineer",
+  "stack": ["React", "FastAPI", "Express"],
+  "status": "disponivel"
 }`,
   },
   {
-    cmd: "docker ps",
-    output: `CONTAINER ID   IMAGE        STATUS
-a1b2c3d4e5f6   postgres:16  Up 2 hours
-b2c3d4e5f6a1   mongo:7      Up 2 hours
-c3d4e5f6a1b2   redis:7      Up 2 hours`,
+    cmd: "docker ps --format table",
+    output: `IMAGE         STATUS
+postgres:16   Up 2h
+mongo:7       Up 2h
+redis:7       Up 2h`,
   },
   {
-    cmd: "fastapi run main.py",
-    output: `<ok>INFO</ok>     Servidor iniciado em http://0.0.0.0:8000
-<ok>INFO</ok>     Docs em http://0.0.0.0:8000/docs
-<info>INFO</info>     Aguardando conexões...`,
+    cmd: "uvicorn main:app",
+    output: `<ok>INFO</ok>  Started on :8000
+<ok>INFO</ok>  Docs at /docs
+<info>INFO</info>  Waiting for connections...`,
   },
   {
     cmd: "git log --oneline -4",
-    output: `<ok>f3a9c2b</ok> feat: rotação de JWT refresh token
-<ok>a7d1e84</ok> fix: melhorar pool de conexão Prisma
-<ok>c5b3f29</ok> chore: atualizar imagens base Docker
-<ok>9e2a1d7</ok> docs: atualizar schema da API`,
+    output: `<ok>f3a9c2b</ok> feat: JWT refresh rotation
+<ok>a7d1e84</ok> fix: Prisma connection pool
+<ok>c5b3f29</ok> chore: update Docker images
+<ok>9e2a1d7</ok> docs: update API schema`,
   },
 ];
 
