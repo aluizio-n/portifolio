@@ -2,161 +2,373 @@
    Portfolio — script.js
    =================================================== */
 
-// ---------- Mock Projects ----------
+// ---------- Projects ----------
+// image: caminho do mockup/screenshot em assets/ ("" = placeholder com moldura de navegador/celular).
+// demo: link para testar a aplicação ("" = "Demo em breve").
+// private: true esconde o link do GitHub (repo privado dá 404 para visitantes).
+// featured: true faz o card ocupar 2 colunas no desktop.
 const projects = [
   {
-    name: "fastapi-auth-service",
-    icon: "🔐",
-    description: "Microsserviço de autenticação JWT com FastAPI e PostgreSQL. Suporta OAuth2, controle de acesso por perfil e rotação de refresh token.",
-    tags: ["python", "pg"],
-    tagLabels: { python: "Python", pg: "PostgreSQL" },
-    language: "Python",
-    languageColor: "#3776ab",
-    stars: 34,
-    forks: 7,
-    status: "active",
-    github: "#",
-    demo: "#",
+    slug: "agente-orcamento-sato",
+    name: "Agente de Orçamento — Sato",
+    kind: "web",
+    categories: ["web", "ia"],
+    accent: "#a371f7",
+    summary: "Bot de WhatsApp com IA que transforma fotos, áudios e mensagens do cliente em um pré-orçamento de funilaria.",
+    description: "O cliente manda a foto do amassado pelo WhatsApp. O Claude lê a imagem, o áudio transcrito pelo Whisper e o texto, pergunta o que falta e monta um pré-orçamento estruturado com peças afetadas, serviços e valor estimado. O consultor trabalha os leads num dashboard React, corrige a estimativa e liga para o cliente.",
+    highlights: [
+      "Claude com visão para ler as fotos da avaria",
+      "Fila com FOR UPDATE SKIP LOCKED: vários clientes atendidos em paralelo, sem respostas duplicadas",
+      "O bot nunca informa preço ao cliente — regra no prompt e checagem no código",
+      "Geração de PDF do orçamento com WeasyPrint",
+    ],
+    stack: ["Python", "FastAPI", "Claude API", "Whisper", "PostgreSQL", "React", "Docker"],
+    image: "",
+    github: "https://github.com/aluizio-n/agente-orcamento-sato",
+    demo: "",
+    private: true,
+    featured: true,
   },
   {
-    name: "express-api-boilerplate",
-    icon: "⚡",
-    description: "Template de API REST Node.js pronto para produção com Express, Prisma, validação Zod e Docker Compose. Inclui exemplos de workflow CI/CD.",
-    tags: ["node", "docker", "pg"],
-    tagLabels: { node: "TypeScript", docker: "Docker", pg: "PostgreSQL" },
-    language: "TypeScript",
-    languageColor: "#68a063",
-    stars: 58,
-    forks: 12,
-    status: "active",
-    github: "#",
-    demo: null,
+    slug: "la-em-casa-app",
+    name: "Lá em Casa — App do Cliente",
+    kind: "mobile",
+    categories: ["mobile", "ia"],
+    accent: "#c9a86a",
+    summary: "App para montar eventos com fingerfoods e mesa posta, com concierge de IA e pedido de orçamento.",
+    description: "Aplicativo mobile em que o cliente monta o seu evento: conversa com um Concierge IA, escolhe itens do cardápio e da mesa posta, revisa e envia o pedido de orçamento. API em FastAPI com regras de preço isoladas e banco no Supabase.",
+    highlights: [
+      "Concierge IA para sugerir o evento ideal",
+      "Regras de preço puras e testáveis (pricing.py)",
+      "Row Level Security ligado em todas as tabelas",
+      "Expo Router + NativeWind + TanStack Query + Zustand",
+    ],
+    stack: ["React Native", "Expo", "TypeScript", "FastAPI", "PostgreSQL", "Docker"],
+    image: "assets/la-em-casa-app.png",
+    github: "https://github.com/aluizio-n/la-em-casa-app",
+    demo: "",
+    private: true,
   },
   {
-    name: "mongo-event-log",
-    icon: "📋",
-    description: "Serviço de log de eventos append-only com MongoDB e FastAPI. Projetado para trilhas de auditoria com alto volume de escrita e consultas em séries temporais.",
-    tags: ["python", "mongo", "docker"],
-    tagLabels: { python: "Python", mongo: "MongoDB", docker: "Docker" },
-    language: "Python",
-    languageColor: "#3776ab",
-    stars: 19,
-    forks: 4,
-    status: "active",
-    github: "#",
-    demo: "#",
+    slug: "alexandre-sato-app",
+    name: "Alexandre Sato — App do Cliente",
+    kind: "mobile",
+    categories: ["mobile"],
+    accent: "#e5533d",
+    summary: "App da oficina: acompanhe o carro em tempo real, veja ofertas, acumule pontos no Clube Sato e peça orçamento.",
+    description: "Aplicativo para clientes da funilaria, pintura e estética automotiva. Mostra cada etapa da ordem de serviço em tempo real, cupons por categoria, programa de fidelidade com níveis e prêmios e agendamento de orçamento. Backend em monólito modular com FastAPI.",
+    highlights: [
+      "Acompanhamento da OS etapa por etapa",
+      "Clube Sato: livro-razão de pontos com trava contra gasto duplo",
+      "Login por telefone com JWT",
+      "Testes com pytest rodando em SQLite, sem precisar de banco",
+    ],
+    stack: ["React Native", "Expo", "TypeScript", "FastAPI", "PostgreSQL", "Docker"],
+    image: "assets/alexandre-sato-app.png",
+    github: "https://github.com/aluizio-n/alexandre-sato-app",
+    demo: "",
+    private: true,
   },
   {
-    name: "prisma-seeder-cli",
-    icon: "🌱",
-    description: "Ferramenta CLI para gerar e executar seeds do Prisma a partir de arquivos YAML. Suporta múltiplos ambientes e estratégias de seed incremental.",
-    tags: ["node", "pg"],
-    tagLabels: { node: "TypeScript", pg: "PostgreSQL" },
-    language: "TypeScript",
-    languageColor: "#68a063",
-    stars: 11,
-    forks: 2,
-    status: "wip",
-    github: "#",
-    demo: null,
+    slug: "muaythai-app",
+    name: "Spartan Muay Thai",
+    kind: "mobile",
+    categories: ["mobile"],
+    accent: "#f0883e",
+    summary: "App da academia Spartan Muay Thai: agenda de aulas, check-in por QR, loja, ranking e graduação.",
+    description: "Aplicativo iOS e Android para alunos da academia: grade de aulas com reserva, check-in por QR code, loja com carrinho, trilha de graduação Prajied, ranking, blog, planos e agendamento de personal (Kru). Tema claro e escuro.",
+    highlights: [
+      "Check-in por QR code",
+      "Trilha de graduação Prajied com anéis de progresso",
+      "Navegação própria com pilhas por aba, sem biblioteca extra",
+      "Builds via EAS para Android e iOS",
+    ],
+    stack: ["React Native", "Expo", "JavaScript", "SVG"],
+    image: "",
+    github: "https://github.com/aluizio-n/muaythai-app",
+    demo: "",
+    private: true,
   },
   {
-    name: "docker-dev-stack",
-    icon: "🐳",
-    description: "Setup Docker Compose para ambiente de desenvolvimento local com Postgres, MongoDB, Redis, PgAdmin e Mongo Express. Um comando para subir tudo.",
-    tags: ["docker", "pg", "mongo"],
-    tagLabels: { docker: "Docker", pg: "PostgreSQL", mongo: "MongoDB" },
-    language: "Shell",
-    languageColor: "#89e051",
-    stars: 42,
-    forks: 9,
-    status: "active",
-    github: "#",
-    demo: null,
+    slug: "race-war",
+    name: "Race War",
+    kind: "mobile",
+    categories: ["mobile"],
+    accent: "#d29922",
+    summary: "Jogo de fitness por geolocalização: corra, pedale ou ande de skate e conquiste territórios no mapa.",
+    description: "Transforma atividades físicas em batalhas por território. O app rastreia a rota por GPS em tempo real; ao fechar o percurso no ponto de partida, a área é conquistada e pontua pelo tamanho em m². Tem rankings globais, desafios por tempo limitado e disputa entre amigos.",
+    highlights: [
+      "Rastreamento de GPS em tempo real e polígonos no Google Maps",
+      "Pontuação pela área conquistada",
+      "JWT com rotação de refresh token e rate limit",
+      "Animações com Reanimated e gráficos com Victory Native",
+    ],
+    stack: ["React Native", "Expo", "TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL"],
+    image: "",
+    github: "https://github.com/aluizio-n/race-war",
+    demo: "",
+    private: true,
   },
   {
-    name: "pydantic-config-loader",
-    icon: "⚙️",
-    description: "Biblioteca de gerenciamento de configuração e variáveis de ambiente com Pydantic Settings v2. Suporta múltiplos ambientes, segredos em arquivo e modelos tipados.",
-    tags: ["python"],
-    tagLabels: { python: "Python" },
-    language: "Python",
-    languageColor: "#3776ab",
-    stars: 23,
-    forks: 5,
-    status: "archive",
-    github: "#",
-    demo: null,
+    slug: "sistema-nao-conformidades",
+    name: "NC Status — Não Conformidades",
+    kind: "web",
+    categories: ["web"],
+    accent: "#39c5cf",
+    summary: "Sistema para registrar, acompanhar e encerrar não conformidades de qualidade industrial.",
+    description: "Sistema web para o controle de qualidade industrial: abertura de NCs com tipo, gravidade, linha e setor, atribuição de responsável, prazo e causa raiz, e dashboard com indicadores. Projeto final do módulo Full Stack do INDT.",
+    highlights: [
+      "Dashboard com NCs abertas, críticas, vencidas e encerradas no mês",
+      "Ranking dos tipos de desvio mais recorrentes",
+      "Perfis de acesso: inspetor, gestor e responsável",
+      "Filtros por status, gravidade, tipo e busca",
+    ],
+    stack: ["Angular", "TypeScript", "Node.js", "Express", "TypeORM", "PostgreSQL"],
+    image: "",
+    github: "https://github.com/aluizio-n/sistema-nao-conformidades",
+    demo: "",
+    private: false,
+  },
+  {
+    slug: "hackway",
+    name: "HackWay",
+    kind: "web",
+    categories: ["web"],
+    accent: "#3fb950",
+    summary: "Guia e tracker de pentests: alvos, escopo por fases PTES, biblioteca de ferramentas e relatórios.",
+    description: "Plataforma para organizar testes de intrusão: cadastro de alvos, escopo dividido nas fases do PTES, biblioteca de ferramentas e comandos por tipo de alvo, notas por fase e geração de relatórios técnico e executivo.",
+    highlights: [
+      "Dados sensíveis dos alvos criptografados em repouso com Fernet",
+      "JWT em cookie httpOnly, SameSite=Lax",
+      "Nginx unificando front e API na mesma origem",
+      "Relatórios técnico e executivo gerados a partir das notas",
+    ],
+    stack: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "Nginx", "Docker"],
+    image: "",
+    github: "https://github.com/aluizio-n/hackway",
+    demo: "",
+    private: false,
+    featured: true,
   },
 ];
 
-// ---------- Render Projects ----------
+const projectFilters = [
+  { id: "all", label: "Todos" },
+  { id: "web", label: "Web" },
+  { id: "mobile", label: "Mobile" },
+  { id: "ia", label: "IA" },
+];
+
+const icons = {
+  github: `<svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>`,
+  external: `<svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14"><path d="M3.75 2h3.5a.75.75 0 0 1 0 1.5h-3.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-3.5a.75.75 0 0 1 1.5 0v3.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm6.854-1h4.146a.25.25 0 0 1 .25.25v4.146a.25.25 0 0 1-.427.177L13.03 4.03 9.28 7.78a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042l3.75-3.75-1.543-1.543A.25.25 0 0 1 10.604 1Z"/></svg>`,
+  lock: `<svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M4 4a4 4 0 0 1 8 0v2h.25c.966 0 1.75.784 1.75 1.75v5.5A1.75 1.75 0 0 1 12.25 15h-8.5A1.75 1.75 0 0 1 2 13.25v-5.5C2 6.784 2.784 6 3.75 6H4Zm8.25 3.5h-8.5a.25.25 0 0 0-.25.25v5.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-5.5a.25.25 0 0 0-.25-.25ZM10.5 6V4a2.5 2.5 0 1 0-5 0v2Z"/></svg>`,
+  web: `<svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M0 2.75C0 1.784.784 1 1.75 1h12.5c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0 1 14.25 15H1.75A1.75 1.75 0 0 1 0 13.25Zm1.5 2.75v7.75c0 .138.112.25.25.25h12.5a.25.25 0 0 0 .25-.25V5.5Zm12.75-3H1.75a.25.25 0 0 0-.25.25V4h13V2.75a.25.25 0 0 0-.25-.25Z"/></svg>`,
+  mobile: `<svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12"><path d="M3.75 0h8.5C13.216 0 14 .784 14 1.75v12.5A1.75 1.75 0 0 1 12.25 16h-8.5A1.75 1.75 0 0 1 2 14.25V1.75C2 .784 2.784 0 3.75 0ZM3.5 1.75v12.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25V1.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25ZM8 13a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/></svg>`,
+};
+
+const kindLabel = { web: "Web App", mobile: "Mobile App" };
+
+function initials(name) {
+  return name.split(/[\s—-]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
+
+// Full-bleed mockup when the project has an image; otherwise a browser/phone frame with a placeholder.
+function projectMedia(p, size = "card") {
+  const placeholder = `
+    <div class="media-placeholder">
+      <span class="placeholder-mark">${initials(p.name)}</span>
+      <span class="placeholder-text">screenshot em breve</span>
+    </div>`;
+
+  if (p.image) {
+    return `
+      <div class="project-media media-${size} has-shot" style="--accent:${p.accent}">
+        <img class="media-shot" src="${p.image}" alt="Telas de ${p.name}" loading="lazy"
+             onerror="this.closest('.project-media').classList.add('no-image'); this.remove();" />
+        ${placeholder}
+      </div>`;
+  }
+
+  const frame = p.kind === "mobile"
+    ? `<div class="device device-phone"><span class="phone-notch"></span>`
+    : `<div class="device device-browser"><div class="browser-bar"><span></span><span></span><span></span><em>${p.slug}</em></div>`;
+
+  return `
+    <div class="project-media media-${size} no-image" style="--accent:${p.accent}">
+      ${frame}
+        <div class="device-screen">${placeholder}</div>
+      </div>
+    </div>`;
+}
+
+function renderFilters() {
+  const bar = document.getElementById("project-filters");
+  if (!bar) return;
+
+  bar.innerHTML = projectFilters.map((f) => {
+    const count = f.id === "all"
+      ? projects.length
+      : projects.filter((p) => p.categories.includes(f.id)).length;
+    return `<button class="filter-chip${f.id === "all" ? " active" : ""}" data-filter="${f.id}" role="tab" aria-selected="${f.id === "all"}">
+      ${f.label}<span class="filter-count">${count}</span>
+    </button>`;
+  }).join("");
+
+  bar.addEventListener("click", (e) => {
+    const chip = e.target.closest(".filter-chip");
+    if (!chip) return;
+    const filter = chip.dataset.filter;
+
+    bar.querySelectorAll(".filter-chip").forEach((c) => {
+      c.classList.toggle("active", c === chip);
+      c.setAttribute("aria-selected", c === chip);
+    });
+
+    document.querySelectorAll("#projects-grid .project-card").forEach((card) => {
+      const p = projects[card.dataset.index];
+      const show = filter === "all" || p.categories.includes(filter);
+      card.classList.toggle("is-hidden", !show);
+      if (show) {
+        card.classList.remove("pop");
+        void card.offsetWidth; // restart the animation
+        card.classList.add("pop");
+      }
+    });
+  });
+}
+
 function renderProjects() {
   const grid = document.getElementById("projects-grid");
   if (!grid) return;
 
-  grid.innerHTML = projects.map((p) => {
-    const tagsHtml = p.tags
-      .map((t) => `<span class="tag ${t}">${p.tagLabels[t]}</span>`)
-      .join("");
-
-    const statusMap = {
-      active: ["status-active", "Ativo"],
-      wip: ["status-wip", "Em andamento"],
-      archive: ["status-archive", "Arquivado"],
-    };
-    const [statusClass, statusLabel] = statusMap[p.status] || statusMap.archive;
+  grid.innerHTML = projects.map((p, i) => {
+    const tagsHtml = p.stack.slice(0, 4).map((t) => `<span class="tag">${t}</span>`).join("")
+      + (p.stack.length > 4 ? `<span class="tag tag-more">+${p.stack.length - 4}</span>` : "");
 
     const demoLink = p.demo
-      ? `<a href="${p.demo}" class="project-link" title="Live demo" target="_blank" rel="noopener">
-           <svg viewBox="0 0 16 16" fill="currentColor" width="13" height="13">
-             <path d="M3.75 2h8.5c.966 0 1.75.784 1.75 1.75v8.5A1.75 1.75 0 0 1 12.25 14h-8.5A1.75 1.75 0 0 1 2 12.25v-8.5C2 2.784 2.784 2 3.75 2Zm0 1.5a.25.25 0 0 0-.25.25v8.5c0 .138.112.25.25.25h8.5a.25.25 0 0 0 .25-.25v-8.5a.25.25 0 0 0-.25-.25Zm6.78 2.22-5.5 5.5a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734l5.5-5.5a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042Z"/>
-           </svg>
-         </a>`
+      ? `<a href="${p.demo}" class="project-link" title="Testar aplicação" target="_blank" rel="noopener">${icons.external}</a>`
       : "";
+    const githubLink = p.private
+      ? `<span class="project-link is-locked" title="Repositório privado">${icons.lock}</span>`
+      : `<a href="${p.github}" class="project-link" title="Ver no GitHub" target="_blank" rel="noopener">${icons.github}</a>`;
 
     return `
-      <div class="project-card fade-up">
-        <div class="project-header">
-          <div class="project-icon">${p.icon}</div>
-          <div class="project-links">
-            ${demoLink}
-            <a href="${p.github}" class="project-link" title="Ver no GitHub" target="_blank" rel="noopener">
-              <svg viewBox="0 0 16 16" fill="currentColor" width="14" height="14">
-                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/>
-              </svg>
-            </a>
+      <article class="project-card fade-up${p.featured ? " featured" : ""}" data-index="${i}" tabindex="0" role="button"
+               aria-label="Ver detalhes de ${p.name}" style="--accent:${p.accent}">
+        ${projectMedia(p)}
+        <div class="project-content">
+          <div class="project-header">
+            <span class="project-kind">${icons[p.kind]} ${kindLabel[p.kind]}</span>
+            <div class="project-links">${demoLink}${githubLink}</div>
+          </div>
+          <div class="project-name">${p.name}</div>
+          <div class="project-desc">${p.summary}</div>
+          <div class="project-tags">${tagsHtml}</div>
+          <div class="project-footer">
+            <span class="project-more">Ver detalhes <span aria-hidden="true">&rarr;</span></span>
+            ${p.demo ? `<span class="project-status status-active">Demo online</span>` : `<span class="project-status status-wip">Demo em breve</span>`}
           </div>
         </div>
-
-        <div class="project-name">${p.name}</div>
-        <div class="project-desc">${p.description}</div>
-        <div class="project-tags">${tagsHtml}</div>
-
-        <div class="project-footer">
-          <div class="project-meta">
-            <span class="meta-item">
-              <span class="meta-dot" style="background:${p.languageColor}"></span>
-              ${p.language}
-            </span>
-            <span class="meta-item">
-              <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12">
-                <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/>
-              </svg>
-              ${p.stars}
-            </span>
-            <span class="meta-item">
-              <svg viewBox="0 0 16 16" fill="currentColor" width="12" height="12">
-                <path d="M5 5.372v.878c0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75v-.878a2.25 2.25 0 1 1 1.5 0v.878a2.25 2.25 0 0 1-2.25 2.25h-1.5v2.128a2.251 2.251 0 1 1-1.5 0V8.5h-1.5A2.25 2.25 0 0 1 3.5 6.25v-.878a2.25 2.25 0 1 1 1.5 0ZM5 3.25a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Zm6.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm-3 8.75a.75.75 0 1 0-1.5 0 .75.75 0 0 0 1.5 0Z"/>
-              </svg>
-              ${p.forks}
-            </span>
-          </div>
-          <span class="project-status ${statusClass}">${statusLabel}</span>
-        </div>
-      </div>
-    `;
+      </article>`;
   }).join("");
+
+  grid.addEventListener("click", (e) => {
+    if (e.target.closest("a")) return; // let icon links work normally
+    const card = e.target.closest(".project-card");
+    if (card) openProjectModal(Number(card.dataset.index));
+  });
+
+  grid.addEventListener("keydown", (e) => {
+    const card = e.target.closest(".project-card");
+    if (card && e.target === card && (e.key === "Enter" || e.key === " ")) {
+      e.preventDefault();
+      openProjectModal(Number(card.dataset.index));
+    }
+  });
+
+  // Spotlight that follows the cursor
+  grid.addEventListener("pointermove", (e) => {
+    const card = e.target.closest(".project-card");
+    if (!card) return;
+    const rect = card.getBoundingClientRect();
+    card.style.setProperty("--mx", `${e.clientX - rect.left}px`);
+    card.style.setProperty("--my", `${e.clientY - rect.top}px`);
+  });
+}
+
+// ---------- Project modal ----------
+let modalIndex = 0;
+
+function visibleProjectIndexes() {
+  const cards = document.querySelectorAll("#projects-grid .project-card:not(.is-hidden)");
+  return Array.from(cards, (c) => Number(c.dataset.index));
+}
+
+function fillProjectModal(i) {
+  const p = projects[i];
+  modalIndex = i;
+
+  const modal = document.getElementById("project-modal");
+  modal.style.setProperty("--accent", p.accent);
+  document.getElementById("modal-media").innerHTML = projectMedia(p, "modal");
+  document.getElementById("modal-kicker").innerHTML =
+    `${icons[p.kind]} ${kindLabel[p.kind]}${p.private ? ` <span class="kicker-private">${icons.lock} Código privado</span>` : ""}`;
+  document.getElementById("modal-title").textContent = p.name;
+  document.getElementById("modal-desc").textContent = p.description;
+  document.getElementById("modal-highlights").innerHTML = p.highlights.map((h) => `<li>${h}</li>`).join("");
+  document.getElementById("modal-tags").innerHTML = p.stack.map((t) => `<span class="tag">${t}</span>`).join("");
+
+  const demoBtn = p.demo
+    ? `<a href="${p.demo}" target="_blank" rel="noopener" class="btn btn-primary">${icons.external} Testar aplicação</a>`
+    : `<span class="btn btn-disabled" aria-disabled="true">${icons.external} Demo em breve</span>`;
+  const codeBtn = p.private
+    ? ""
+    : `<a href="${p.github}" target="_blank" rel="noopener" class="btn btn-outline">${icons.github} Ver código</a>`;
+  document.getElementById("modal-actions").innerHTML = demoBtn + codeBtn;
+
+  const order = visibleProjectIndexes();
+  document.getElementById("modal-counter").textContent = `${order.indexOf(i) + 1} / ${order.length}`;
+
+  const shell = modal.querySelector(".modal-shell");
+  shell.classList.remove("swap");
+  void shell.offsetWidth; // restart the animation
+  shell.classList.add("swap");
+}
+
+function stepProjectModal(dir) {
+  const order = visibleProjectIndexes();
+  const pos = order.indexOf(modalIndex);
+  fillProjectModal(order[(pos + dir + order.length) % order.length]);
+}
+
+function openProjectModal(i) {
+  const modal = document.getElementById("project-modal");
+  fillProjectModal(i);
+  modal.showModal();
+  document.body.style.overflow = "hidden";
+}
+
+function initProjectModal() {
+  const modal = document.getElementById("project-modal");
+  if (!modal) return;
+
+  const close = () => modal.close();
+  document.getElementById("modal-close").addEventListener("click", close);
+  document.getElementById("modal-prev").addEventListener("click", () => stepProjectModal(-1));
+  document.getElementById("modal-next").addEventListener("click", () => stepProjectModal(1));
+
+  // Clicking the backdrop closes the modal
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) close();
+  });
+  modal.addEventListener("close", () => {
+    document.body.style.overflow = "";
+  });
+  modal.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowLeft") stepProjectModal(-1);
+    if (e.key === "ArrowRight") stepProjectModal(1);
+  });
 }
 
 // ---------- Typewriter terminal ----------
@@ -329,7 +541,9 @@ function initMobileMenu() {
 
 // ---------- Init ----------
 document.addEventListener("DOMContentLoaded", () => {
-  // renderProjects(); // WIP: uncomment when projects are ready
+  renderFilters();
+  renderProjects();
+  initProjectModal();
   addFadeUp();
   initScrollObserver();
   initNavScroll();
