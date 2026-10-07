@@ -509,7 +509,7 @@ function addFadeUp() {
   const targets = [
     ".about-card", ".about-bio",
     ".stack-group", ".lang-bar-section",
-    ".contact-card",
+    ".contact-card", ".section-header",
   ];
   targets.forEach((sel) => {
     document.querySelectorAll(sel).forEach((el) => {
@@ -539,6 +539,166 @@ function initMobileMenu() {
   });
 }
 
+// ---------- Animated background (particle network that reacts to the mouse) ----------
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pointer = { x: -9999, y: -9999, active: false };
+
+function initBackground() {
+  const canvas = document.getElementById("bg-canvas");
+  if (!canvas || prefersReducedMotion) return;
+  const ctx = canvas.getContext("2d");
+  const colors = ["63,185,80", "88,166,255", "163,113,247"];
+  const LINK_DIST = 130;
+  const MOUSE_DIST = 180;
+  let particles = [];
+  let w = 0, h = 0, dpr = 1;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const count = Math.min(110, Math.floor((w * h) / 14000));
+    particles = Array.from({ length: count }, () => ({
+      x: Math.random() * w,
+      y: Math.random() * h,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: (Math.random() - 0.5) * 0.35,
+      r: Math.random() * 1.6 + 0.6,
+      c: colors[Math.floor(Math.random() * colors.length)],
+    }));
+  }
+
+  function step() {
+    ctx.clearRect(0, 0, w, h);
+
+    for (const p of particles) {
+      // gentle pull towards the cursor
+      if (pointer.active) {
+        const dx = pointer.x - p.x;
+        const dy = pointer.y - p.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < MOUSE_DIST && dist > 1) {
+          p.vx += (dx / dist) * 0.012;
+          p.vy += (dy / dist) * 0.012;
+        }
+      }
+      // keep speed in check
+      const speed = Math.hypot(p.vx, p.vy);
+      if (speed > 0.9) { p.vx *= 0.9 / speed; p.vy *= 0.9 / speed; }
+
+      p.x += p.vx;
+      p.y += p.vy;
+      if (p.x < -10) p.x = w + 10; else if (p.x > w + 10) p.x = -10;
+      if (p.y < -10) p.y = h + 10; else if (p.y > h + 10) p.y = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${p.c},.7)`;
+      ctx.fill();
+    }
+
+    for (let i = 0; i < particles.length; i++) {
+      const a = particles[i];
+      for (let j = i + 1; j < particles.length; j++) {
+        const b = particles[j];
+        const d = Math.hypot(a.x - b.x, a.y - b.y);
+        if (d < LINK_DIST) {
+          ctx.strokeStyle = `rgba(${a.c},${(1 - d / LINK_DIST) * 0.18})`;
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
+        }
+      }
+      if (pointer.active) {
+        const d = Math.hypot(a.x - pointer.x, a.y - pointer.y);
+        if (d < MOUSE_DIST) {
+          ctx.strokeStyle = `rgba(${a.c},${(1 - d / MOUSE_DIST) * 0.45})`;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(pointer.x, pointer.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(step);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  requestAnimationFrame(step);
+}
+
+// ---------- Mouse-driven effects (glow, hero grid, card spotlights, photo tilt) ----------
+function initPointerEffects() {
+  const glow = document.getElementById("cursor-glow");
+  const hero = document.getElementById("hero");
+  const heroGrid = document.querySelector(".hero-grid-bg");
+  const photo = document.querySelector(".photo-card");
+
+  window.addEventListener("pointermove", (e) => {
+    pointer.x = e.clientX;
+    pointer.y = e.clientY;
+    pointer.active = e.pointerType === "mouse";
+    if (glow) {
+      glow.style.setProperty("--gx", `${e.clientX}px`);
+      glow.style.setProperty("--gy", `${e.clientY}px`);
+    }
+  }, { passive: true });
+  document.addEventListener("pointerleave", () => { pointer.active = false; });
+
+  if (hero && heroGrid) {
+    hero.addEventListener("pointermove", (e) => {
+      const rect = heroGrid.getBoundingClientRect();
+      heroGrid.style.setProperty("--hx", `${e.clientX - rect.left}px`);
+      heroGrid.style.setProperty("--hy", `${e.clientY - rect.top}px`);
+
+      if (photo && !prefersReducedMotion) {
+        const r = hero.getBoundingClientRect();
+        const nx = (e.clientX - r.left) / r.width - 0.5;
+        const ny = (e.clientY - r.top) / r.height - 0.5;
+        photo.style.setProperty("--ry", `${nx * 10}deg`);
+        photo.style.setProperty("--rx", `${-ny * 10}deg`);
+      }
+    });
+    hero.addEventListener("pointerleave", () => {
+      heroGrid.style.setProperty("--hx", "-500px");
+      heroGrid.style.setProperty("--hy", "-500px");
+      if (photo) {
+        photo.style.setProperty("--rx", "0deg");
+        photo.style.setProperty("--ry", "0deg");
+      }
+    });
+  }
+
+  document.querySelectorAll(".stack-group, .about-card, .contact-card").forEach((card) => {
+    card.classList.add("spotlight");
+    card.addEventListener("pointermove", (e) => {
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    });
+  });
+}
+
+// ---------- Scroll progress bar ----------
+function initScrollProgress() {
+  const bar = document.getElementById("scroll-progress");
+  if (!bar) return;
+  const update = () => {
+    const max = document.documentElement.scrollHeight - window.innerHeight;
+    bar.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  update();
+}
+
 // ---------- Init ----------
 document.addEventListener("DOMContentLoaded", () => {
   renderFilters();
@@ -549,5 +709,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavScroll();
   initActiveNav();
   initMobileMenu();
+  initBackground();
+  initPointerEffects();
+  initScrollProgress();
   runTerminal();
 });
