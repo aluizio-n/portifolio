@@ -23,7 +23,7 @@ const projects = [
       "Geração de PDF do orçamento com WeasyPrint",
     ],
     stack: ["Python", "FastAPI", "Claude API", "Whisper", "PostgreSQL", "React", "Docker"],
-    image: "",
+    image: "assets/agente-orcamento-sato.png",
     github: "https://github.com/aluizio-n/agente-orcamento-sato",
     demo: "",
     private: true,
