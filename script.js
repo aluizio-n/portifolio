@@ -10,7 +10,7 @@
 const projects = [
   {
     slug: "agente-orcamento-sato",
-    name: "Agente de Orçamento — Sato",
+    name: "Agente de Orçamento — Alexandre Sato",
     kind: "web",
     categories: ["web", "ia"],
     accent: "#a371f7",
