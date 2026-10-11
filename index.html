@@ -330,12 +330,17 @@
       <div class="section-header">
         <span class="section-label">Repositories</span>
         <h2 class="section-title">Projetos</h2>
-        <p class="section-desc">Alguns dos projetos que desenvolvi. Clique em um card para ver os detalhes.</p>
+        <p class="section-desc">Alguns dos projetos que desenvolvi. Arraste ou use as setas para navegar e clique no card da frente para ver os detalhes.</p>
       </div>
 
       <div class="project-filters" id="project-filters" role="tablist" aria-label="Filtrar projetos"></div>
 
-      <div class="projects-grid" id="projects-grid"></div>
+      <div class="projects-carousel">
+        <button class="carousel-btn carousel-prev" id="carousel-prev" aria-label="Projeto anterior">&larr;</button>
+        <div class="projects-stage" id="projects-grid" aria-roledescription="carrossel"></div>
+        <button class="carousel-btn carousel-next" id="carousel-next" aria-label="Próximo projeto">&rarr;</button>
+      </div>
+      <div class="carousel-dots" id="carousel-dots" aria-label="Escolher projeto"></div>
     </div>
   </section>
 
@@ -400,7 +405,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <span class="footer-logo">aluizio.dev</span>
-      <span class="footer-copy">Feito com HTML, CSS &amp; JS · Sem frameworks</span>
+      <span class="footer-secret" title="Selecione para ler">feito com <span class="footer-heart">&#x2764;&#xFE0E;</span> por Aluizio Neto</span>
       <div class="footer-links">
         <a href="https://github.com/aluizio-n" target="_blank">GitHub</a>
       </div>
