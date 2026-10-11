@@ -70,26 +70,6 @@ const projects = [
     private: true,
   },
   {
-    slug: "muaythai-app",
-    name: "Spartan Muay Thai",
-    kind: "mobile",
-    categories: ["mobile"],
-    accent: "#f0883e",
-    summary: "App da academia Spartan Muay Thai: agenda de aulas, check-in por QR, loja, ranking e graduação.",
-    description: "Aplicativo iOS e Android para alunos da academia: grade de aulas com reserva, check-in por QR code, loja com carrinho, trilha de graduação Prajied, ranking, blog, planos e agendamento de personal (Kru). Tema claro e escuro.",
-    highlights: [
-      "Check-in por QR code",
-      "Trilha de graduação Prajied com anéis de progresso",
-      "Navegação própria com pilhas por aba, sem biblioteca extra",
-      "Builds via EAS para Android e iOS",
-    ],
-    stack: ["React Native", "Expo", "JavaScript", "SVG"],
-    image: "",
-    github: "https://github.com/aluizio-n/muaythai-app",
-    demo: "",
-    private: true,
-  },
-  {
     slug: "race-war",
     name: "Race War",
     kind: "mobile",
@@ -104,7 +84,7 @@ const projects = [
       "Animações com Reanimated e gráficos com Victory Native",
     ],
     stack: ["React Native", "Expo", "TypeScript", "Node.js", "Express", "Prisma", "PostgreSQL"],
-    image: "",
+    image: "assets/racewar.png",
     github: "https://github.com/aluizio-n/race-war",
     demo: "",
     private: true,
@@ -124,7 +104,7 @@ const projects = [
       "Filtros por status, gravidade, tipo e busca",
     ],
     stack: ["Angular", "TypeScript", "Node.js", "Express", "TypeORM", "PostgreSQL"],
-    image: "",
+    image: "assets/nc.png",
     github: "https://github.com/aluizio-n/sistema-nao-conformidades",
     demo: "",
     private: false,
@@ -144,7 +124,7 @@ const projects = [
       "Relatórios técnico e executivo gerados a partir das notas",
     ],
     stack: ["Next.js", "TypeScript", "FastAPI", "PostgreSQL", "Nginx", "Docker"],
-    image: "",
+    image: "assets/hackway.png",
     github: "https://github.com/aluizio-n/hackway",
     demo: "",
     private: false,
@@ -182,10 +162,16 @@ function projectMedia(p, size = "card") {
     </div>`;
 
   if (p.image) {
+    const img = `<img class="media-shot" src="${p.image}" alt="Telas de ${p.name}" loading="lazy"
+             onerror="this.closest('.project-media').classList.add('no-image'); (this.closest('.media-zoom') || this).remove();" />`;
+    // In the modal the screenshot links to the full-size file
+    const shot = size === "modal"
+      ? `<a class="media-zoom" href="${p.image}" target="_blank" rel="noopener" aria-label="Abrir imagem de ${p.name} em tamanho real">${img}</a>
+         <span class="media-zoom-hint">ver em tamanho real ↗</span>`
+      : img;
     return `
       <div class="project-media media-${size} has-shot" style="--accent:${p.accent}">
-        <img class="media-shot" src="${p.image}" alt="Telas de ${p.name}" loading="lazy"
-             onerror="this.closest('.project-media').classList.add('no-image'); this.remove();" />
+        ${shot}
         ${placeholder}
       </div>`;
   }
